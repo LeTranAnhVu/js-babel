@@ -31,80 +31,79 @@ $(function () {
 		$('select.form-control').removeClass('form-control').css('width', '100%');
 	}
 });
-// Main
-$(document).ready(function () {
-	// Phần Slider
-	$('.home-slider .owl-carousel').owlCarousel({
-		items: 1,
-		nav: false,
-		dots: true,
-		navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>']
-	});
-	// Phần Clients
-	$('.home-clients .owl-carousel').owlCarousel({
-		items: 1,
-		nav: true,
-		dots: false,
-		navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
-		responsive: {
-			// breakpoint from 480 up
-			480: {
-				items: 2
-			},
-			// breakpoint from 768 up
-			768: {
-				items: 4
-			},
-			// breakpoint from 992 up
-			992: {
-				items: 6
-			}
-		}
-	});
-});
+var app = {
+	list: [{
+		id: 1,
+		name: 'iphone X',
+		price: 990,
+		tax: 10,
+		type: 1
+	}, {
+		id: 2,
+		name: 'iphone XS',
+		price: 3000,
+		tax: 15,
+		type: 2
+	}]
+};
 
-function MaHoa01(text) {
-	this.lookupKey = {};
-	this.keys = ' qwerty'.split('');
-	this.codes = '_$_;@~;#_;^.;__*_;%$;__#__'.split(";");
-	console.log('me');
-	console.log(this.keys);
-	console.log(this.codes);
-	this.mapkey = function () {
-		var _this = this;
+var _ = new PriceForm('#formCalcProductPrice1');
+var _2 = new PriceForm('#formCalcProductPrice2');
 
-		if (this.keys.length === this.codes.length) {
-			this.keys.forEach(function (key, i) {
-				_this.lookupKey[key] = _this.codes[i];
+function PriceForm(target) {
+	// properties
+	this.$parent = $(target);
+	this.$product = this.$parent.find('.product');
+	this.$price = this.$parent.find('.price');
+	this.$quantity = this.$parent.find('.quantity');
+	this.$tax = this.$parent.find('.tax');
+	this.$total = this.$parent.find('.total');
+	this.$btn = this.$parent.find('.calcPriceBtn');
+	this.$observes = [this.$product, this.$quantity];
+	//method
+	// listen the button
+	this.doCalc = function () {
+		var _self = this;
+		this.$btn.on('click', function () {
+			var total = 0;
+			var type = _self.$product.val();
+			var quantity = _self.$quantity.val();
+			var tax = 0; // get from database.
+			app.list.forEach(function (item) {
+				item.type == type ? total = Math.round(quantity * item.price * (item.tax / 100 + 1)) : null;
 			});
-		} else {
-			console.log('length is not equal');
-		}
+			console.log('hwhw');
+			// render result
+			_self.$total.val(total.toString());
+		});
 	};
-	this.dohash = function (text, isHash) {
-		this.mapkey();
-		console.log(this.lookupKey);
-		for (var key in this.lookupKey) {
-			if (this.lookupKey.hasOwnProperty(key)) {
-				var element = this.lookupKey[key];
-				if (isHash) {
-					text = text.replace(new RegExp(key, 'gi'), element);
-				} else {
-					text = text.replace(new RegExp(element, 'gi'), key);
-				}
-			}
-		}
-		return text;
+	this.updateForm = function () {
+		var _self = this;
+		var type = this.$product.val();
+		var price = 0;
+		var tax = 0;
+		app.list.forEach(function (item) {
+			item.type == type ? (tax = item.tax, price = item.price) : null;
+		});
+		_self.$tax.val(tax.toString());
+		_self.$price.val(price.toString());
+		// re-calc
+		_self.$btn.trigger('click');
 	};
+	this.onChange = function ($targets) {
+		var _self = this;
+		$targets.forEach(function ($target) {
+			$target.on('change', function () {
+				_self.updateForm();
+				console.log('in onchange function');
+				_self.$btn.trigger('click');
+			});
+		});
+	};
+
+	// listenning btn
+	this.doCalc();
+	this.onChange(this.$observes);
+	// listenning the change
 }
-
-var text = 'Ladies & Gentlemen';
-console.log(text);
-
-var code = new MaHoa01().dohash(text, true);
-console.log(code);
-var decodeStr = new MaHoa01().dohash(code);
-console.log(decodeStr);
-
-// let sss = new RegExp('*9'.toString(),'g');
 //# sourceMappingURL=main.js.map

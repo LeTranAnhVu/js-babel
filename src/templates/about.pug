@@ -11,4 +11,53 @@ block body
 			.row
 				.col
 					h1.mt-4 About Page
+				.container
+					.row
+						.col-md-5
+							.formCalcProductPrice#formCalcProductPrice1
+								.form-group
+									label(for="sanpham") Sản phẩm
+									select.product#sanpham.form-control
+										option(value=1) Iphone X
+										option(value=2) Iphone XS
+								.form-group
+									label(for="gia") Giá ($)
+									input.price#gia.form-control(type="number" placeholder="Số lượng" disabled)
+								.row
+									.col-6
+										.form-group
+											label(for="soluong") Số lượng (cái)
+											input.quantity#soluong.form-control(type="number" name="soluong" placeholder="Số lượng")
+									.col-6
+										.form-group
+											label(for="thue") Thuế (%)
+											input.tax#thue.form-control(type="number" name="thue" disabled)
+								.form-group
+									label(for="tongtien") Giá ($)
+									input.total#tongtien.form-control(type="number" disabled)
+								button.btn.btn-primary.calcPriceBtn(type="button") Thành Tiền
+						.col-md-5
+							.formCalcProductPrice#formCalcProductPrice2
+								.form-group
+									label(for="sanpham") Sản phẩm
+									select.product#sanpham.form-control
+										option(value=1) Iphone X
+										option(value=2) Iphone XS
+								.form-group
+									label(for="gia") Giá ($)
+									input.price#gia.form-control(type="number" placeholder="Số lượng" disabled)
+								.row
+									.col-6
+										.form-group
+											label(for="soluong") Số lượng (cái)
+											input.quantity#soluong.form-control(type="number" name="soluong" placeholder="Số lượng")
+									.col-6
+										.form-group
+											label(for="thue") Thuế (%)
+											input.tax#thue.form-control(type="number" name="thue" disabled)
+								.form-group
+									label(for="tongtien") Giá ($)
+									input.total#tongtien.form-control(type="number" disabled)
+								button.btn.btn-primary.calcPriceBtn(type="button") Thành Tiền
+
 
